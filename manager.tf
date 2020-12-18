@@ -109,11 +109,11 @@ resource "azurerm_subnet_network_security_group_association" "vinculo1" {
 
 */
 data "template_file" "programa" {
-  template = file("script.sh")
+  template = file("./script.sh")
 } 
 
 data "template_file" "manager" {
-  template = file("scriptmanager.sh")
+  template = file("./scriptmanager.sh")
 }
 
 output "idmanagerSbn" {
