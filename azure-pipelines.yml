@@ -9,12 +9,6 @@ steps:
       SourceFolder: manager
       Contents: '*.json'
       TargetFolder: '$(build.artifactstagingdirectory)/manager'
-  - task: Npm@1
-    displayName: 'npm custom'
-    inputs:
-      command: custom
-      verbose: false
-      customCommand: 'install --production'
   - task: ArchiveFiles@2
     displayName: 'Archive $(Build.SourcesDirectory)'
     inputs:
