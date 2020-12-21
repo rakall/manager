@@ -6,9 +6,9 @@ steps:
   - task: CopyFiles@2
     displayName: 'Copy Files to: $(build.artifactstagingdirectory)/manager'
     inputs:
-      SourceFolder: manager
+      SourceFolder: $(build.artifactstagingdirectory)
       Contents: '*.json'
-      TargetFolder: '$(build.artifactstagingdirectory)/manager'
+      TargetFolder: '$(build.artifactstagingdirectory)'
   - task: ArchiveFiles@2
     displayName: 'Archive $(Build.SourcesDirectory)'
     inputs:
