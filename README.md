@@ -1,0 +1,1 @@
+[![Build Status](https://dev.azure.com/felixmarotoromanext/cloudmss/_apis/build/status/rakall.manager?branchName=main)](https://dev.azure.com/felixmarotoromanext/cloudmss/_build/latest?definitionId=3&branchName=main)
