@@ -1,54 +1,32 @@
 variable "loc"{
     type        = string
 }
-resource "azurerm_virtual_machine" "manager" {
-    name                  = "manager"
-    location              = azurerm_resource_group.rgmanager.location
-    resource_group_name   = azurerm_resource_group.rgmanager.name
-    network_interface_ids = [azurerm_network_interface.nic_manager.id]
-    primary_network_interface_id = azurerm_network_interface.nic_manager.id
-    vm_size               = "Standard_D3_v2"
 
-    storage_os_disk {
-        name              = "managerdisk"
-        caching           = "ReadWrite"
-        create_option     = "FromImage"
-        managed_disk_type = "Standard_LRS"
-    }
+resource "azurerm_linux_virtual_machine" "manager" {
+  name                  = "manager"
+  location              = azurerm_resource_group.rgmanager.location
+  resource_group_name   = azurerm_resource_group.rgmanager.name
+  size                  = "Standard_D3_v2"
+  admin_username        = "cloudmss"
+  admin_password        = "Password1234"
+  network_interface_ids = [azurerm_network_interface.nic_manager.id]
+  custom_data = base64encode(data.template_file.manager.rendered)
 
-    storage_image_reference {
-        publisher = "checkpoint"
-        offer     = "check-point-cg-r8030"
-        sku       = "mgmt-byol"
-        version   = "latest"
-    }
+  os_disk {
+    caching              = "ReadWrite"
+    storage_account_type = "Standard_LRS"
+  }
 
-    plan {
-        name = "mgmt-byol"
-        publisher = "checkpoint"
-        product = "check-point-cg-r8030"
-        }
-    os_profile {
-        computer_name  = "manager"
-        admin_username = "cloudmss"
-        admin_password = "Password1234"
-        custom_data = base64encode(data.template_file.manager.rendered)
-
-    }
-
-    os_profile_linux_config {
-        disable_password_authentication = false
-    }
-
-    boot_diagnostics {
-        enabled = "true"
-        storage_uri = azurerm_storage_account.hdmanager.primary_blob_endpoint
-    }
-tags ={
-        x-chkp-template = "checkpoinmanager"
-        x-chkp-management = "tfmanager"
-    }  
-
+  source_image_reference {
+    publisher = "checkpoint"
+    offer     = "check-point-cg-r8030"
+    sku       = "mgmt-byol"
+    version   = "latest"
+  }
+  boot_diagnostics {
+    #enabled = "true"
+    storage_account_uri = azurerm_storage_account.hdmanager.primary_blob_endpoint
+  }
 }
 
 resource "azurerm_resource_group" "rgmanager" {
